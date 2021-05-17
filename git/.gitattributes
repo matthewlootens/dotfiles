@@ -1,0 +1,4 @@
+*.java diff=java
+*.css diff=css
+*.html diff=html
+*.py diff=python

@@ -1,0 +1,36 @@
+IP_ADDRESS=192.168.0.3
+GID=matthew
+USER=matthew
+CRED_PATH=~/dotfiles/bash/cred.txt
+
+mountvc () {
+sudo mount.cifs //192.168.0.3/common /home/matthew/Desktop/common -o cred=$CRED_PATH,vers=2.0
+}
+
+mountaldus () {
+sudo mount -t cifs //$IP_ADDRESS/aldus /media/$USER -o cred=$CRED_PATH,vers=2.0,gid=$GID,uid=$USER
+}
+
+mountmedia () {
+sudo mount -t cifs //192.168.0.3/media /media/$USER -o cred=$CRED_PATH,vers=2.0,gid=$GID,uid=$USER
+}
+
+backup_home () {
+  mountaldus
+  currentDate=`date +"%Y_%m_%d"`
+  borg create --stats --progress --exclude-from ~/projects/backup/borg_exclude.txt /media/matthew/borg_main::$currentDate ~
+}
+
+#convertSpace() {
+#ls | while read -r FILE
+#do
+#    mv -v "$FILE" `echo $FILE | tr ' ' '_' | tr -d '[{}(),\!]' | tr -d "\'" | tr '[A-Z]' '[a-z]' | sed 's/_-_/_/g'`
+#done
+#}
+
+convertSpaces() {
+ls | while read -r FILE
+do
+    mv -v "$FILE" `echo $FILE | tr ' ' '_' `
+done
+}
